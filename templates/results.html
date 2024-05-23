@@ -6,7 +6,18 @@
     <title>Generated Tags</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
+    <style>
+      .table-container {
+        max-height: 400px; /* Set the height you want for the scrollable area */
+        overflow-y: auto; /* Enable vertical scrolling */
+      }
+      table {
+        font-size: 0.75rem; /* Smaller font size */
+      }
+      th, td {
+        padding: 0.25rem; /* Smaller padding for table cells */
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -18,7 +29,7 @@
         <h1 class="display-4">Generated Tags</h1>
         <p class="lead">Here are the tags generated from your CSV file.</p>
         <hr class="my-4">
-        <div class="table-responsive">
+        <div class="table-container table-responsive">
           {{ table_html|safe }}
         </div>
         <a href="/download/{{ filename }}" class="btn btn-primary btn-lg mt-3">Download CSV with Tags</a>
