@@ -5,35 +5,36 @@ from openai import OpenAI
 
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['GENERATED_FOLDER'] = 'generated'
+
+# Ensure the folders exist
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['GENERATED_FOLDER'], exist_ok=True)
 
 def generate_tags(dataframe):
     data = dataframe.copy()
     data['name_description'] = data['Name'] + ' ' + data['Description']
 
     tags = data.dropna().reset_index(drop='index')
-    no_tag = data[data['Tags'].isna()].reset_index(drop='index')
+
+    data["Generated Tags"] = None
 
     client = OpenAI(api_key="sk-proj-OW3BIPRXsb4uhiwB1vO9T3BlbkFJNBekzWtxf16Wl2qBHmVS")
 
-    for i in range(no_tag.shape[0]):
+    for i in range(data.shape[0]):
         completion = client.chat.completions.create(
             model="gpt-4-turbo-2024-04-09",
             messages=[
             {"role": "system", "content": "You are a tag generating assistant, skilled in extracting key information based on description."},
-            {"role": "user", "content": f"This is example of tags based on name and description: {tags}. Generate 10 tags like example based on name and description: {no_tag['name_description'].iloc[i]}"}
+            {"role": "user", "content": f"This is example of tags based on name and description: {tags}. Generate 10 tags like example based on name and description: {data['name_description'].iloc[i]}"}
             ]
         )
 
-        print('-------------------------------------------------')
-        print(no_tag['name_description'].iloc[i])
-        no_tag['Tags'][i] = completion.choices[0].message.content.replace('\n', ' ')
-        print(completion.choices[0].message.content.replace('\n', ' '))
-    # Example function to generate tags based on data
-    #dataframe['Tag'] = 'Tag_' + dataframe['Column1'].astype(str)
-    return no_tag
+
+        data['Generated Tags'][i] = completion.choices[0].message.content.replace('\n', ' ')
+
+    return data[['Name', 'Description', 'Tags', 'Generated Tags']]
 
 @app.route('/')
 def index():
@@ -51,12 +52,11 @@ def upload_file():
         file.save(filepath)
         dataframe = pd.read_csv(filepath, usecols=['Name', 'Description', 'Tags'])
         processed_df = generate_tags(dataframe)
-        print(f'first df: {processed_df.columns}')
+
         # Save the processed dataframe to a CSV in memory
-        output_filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'output_' + file.filename)
+        output_filepath = os.path.join(app.config['GENERATED_FOLDER'], 'output_' + file.filename)
         processed_df.to_csv(output_filepath, index=False)
 
-        print(f'second df: {processed_df.columns}')
         # Convert the dataframe to HTML table
         table_html = processed_df.to_html(classes='table table-striped', index=False)
         
@@ -68,7 +68,7 @@ def upload_file():
     
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
-    output_filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'output_' + filename)
+    output_filepath = os.path.join(app.config['GENERATED_FOLDER'], filename)
     return send_file(output_filepath, as_attachment=True)
 
 if __name__ == '__main__':
