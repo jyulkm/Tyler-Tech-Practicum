@@ -51,11 +51,25 @@ def upload_file():
         file.save(filepath)
         dataframe = pd.read_csv(filepath, usecols=['Name', 'Description', 'Tags'])
         processed_df = generate_tags(dataframe)
+        print(f'first df: {processed_df.columns}')
+        # Save the processed dataframe to a CSV in memory
         output_filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'output_' + file.filename)
         processed_df.to_csv(output_filepath, index=False)
-        return send_file(output_filepath, as_attachment=True)
+
+        print(f'second df: {processed_df.columns}')
+        # Convert the dataframe to HTML table
+        table_html = processed_df.to_html(classes='table table-striped', index=False)
+        
+        # Pass the HTML table and CSV data to the template
+        return render_template('results.html', table_html=table_html, filename='output_' + file.filename)
     else:
         return 'Invalid file format. Please upload a CSV file.'
 
+    
+@app.route('/download/<filename>', methods=['GET'])
+def download_file(filename):
+    output_filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'output_' + filename)
+    return send_file(output_filepath, as_attachment=True)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8000)
