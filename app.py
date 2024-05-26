@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, send_file
 import pandas as pd
 import os
 from openai import OpenAI
-
+from waitress import serve
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -72,4 +72,4 @@ def download_file(filename):
     return send_file(output_filepath, as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    serve(app, host='0.0.0.0', port=8000)
