@@ -20,7 +20,7 @@ def generate_tags(dataframe):
 
     data["Generated Tags"] = None
 
-    client = OpenAI(api_key="sk-proj-OW3BIPRXsb4uhiwB1vO9T3BlbkFJNBekzWtxf16Wl2qBHmVS")
+    client = OpenAI(api_key=os.getenv("API_KEY"))
 
     for i in range(data.shape[0]):
         completion = client.chat.completions.create(
