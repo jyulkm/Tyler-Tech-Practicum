@@ -1,0 +1,30 @@
+body {
+  padding-top: 3.5rem;
+  background-color: #f8f9fa;
+}
+
+.jumbotron {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 1.5rem; /* Reduce padding to make it smaller */
+}
+
+.table {
+  background-color: #ffffff;
+}
+
+#loading {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  text-align: center;
+}
+
+.spinner-border {
+  width: 2rem; /* Smaller spinner */
+  height: 2rem; /* Smaller spinner */
+}
