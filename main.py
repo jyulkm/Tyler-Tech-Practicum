@@ -6,11 +6,14 @@ from matplotlib import figure
 import argparse
 
 from openai import OpenAI
+import yake
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def generate_openai(data):
     API = 'sk-proj-3kc5M0DRmFMw70XGgRcST3BlbkFJMmajvYAxkFwg9oK5a8EW'
 
+    data['Name'].fillna('', inplace=True)
+    data['Description'].fillna('', inplace=True)
     data['name_description'] = data['Name'] + ' ' + data['Description']
 
     tags = data.dropna().reset_index(drop='index')
@@ -37,10 +40,24 @@ def generate_openai(data):
 
     return new_tags
 
-def yake(data):
-    return
+def generate_yake(data):
+    data['Name'].fillna('', inplace=True)
+    data['Description'].fillna('', inplace=True)
+    data['name_description'] = data['Name'] + ' ' + data['Description']
 
-def tfidf(data):
+    kw_extractor_yake = yake.KeywordExtractor()
+
+    data["Keywords"] = data["name_description"].apply(lambda x : kw_extractor_yake.extract_keywords(x))
+    data["Generated Tags"] = data["Keywords"].apply(lambda x: [i[0] for i in x])
+
+    new_tags = data[['Name', 'Description', 'Tags', 'Generated Tags']]
+
+    new_tags.to_csv('output.csv', index=False)
+
+    return new_tags
+
+
+def generate_tfidf(data):
     data['Name'].fillna('', inplace=True)
     data['Description'].fillna('', inplace=True)
 
@@ -61,9 +78,9 @@ def tfidf(data):
 
     data['Top_Keywords'] = top_keywords
 
-    data[['Name', 'Description', 'Tags', 'Top_Keywords']].to_csv('output.csv', index=False)
+    data[['Name', 'Description', 'Tags', 'Generated Tags']].to_csv('output.csv', index=False)
 
-    return data[['Name', 'Description', 'Tags', 'Top_Keywords']]
+    return data[['Name', 'Description', 'Tags', 'Generated Tags']]
 
 
 
@@ -81,6 +98,6 @@ if __name__ == '__main__':
     if opt.method == 'openai':
         output_data = generate_openai(data)
     elif opt.method == 'yake':
-        output_data = yake(data)
+        output_data = generate_yake(data)
     else:
-        output_data = tfidf(data)
+        output_data = generate_tfidf(data)

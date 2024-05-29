@@ -42,7 +42,7 @@ python3 main.py -method 'yake'
 ```bash
 python3 main.py -method 'tfidf'
 ```
-4. Generate tags with customized data (data should have 'Name', 'Description', 'Tags' columns)
+4. Generate tags with customized data (data should be in data folder and have 'Name', 'Description', 'Tags' columns)
 ```bash
 python3 main.py -data 'name of csv file'
 ```
