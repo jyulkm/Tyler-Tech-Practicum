@@ -1,12 +1,12 @@
-# Auto-tagging System
-# Company: Tyler Technology
+# Auto-tagging System - Tyler Technology
 
 Auto tagging system that generates tags for dataset based on name and description of dataset.
 
-Members:
-- Jiyul Kim
-- Jeongyoon Lee
-- Shreya Singh
+## Introduction
+This project is 
+
+## System Architecture
+![Project Screenshot](images/architecture.png)
 
 ## Codebase Structure
 - `static` - Source code that defines core dataset generation, model architecture, training, and evaluation functionality
@@ -22,10 +22,28 @@ To install the necessary dependencies, run the following command:
 
 ```bash
 pip install -r requirements.txt
+```
 
-## Reproducing Figures Using Trained Models
-To reproduce figures from the paper, move to the `scripts/analysis` directory and run the following scripts:
-- `1_plot_dataset.py` - Figure 1a
-- `2_plot_metrics.py` - Figures 1c, 2a, and 2c
-- `3_plot_trajs_fps.py` - Figures 1d, 2b, 2d, and 3a
-- `4_plot_eigvals.py` - Figures 3b-e
+## Generating Tags with different Methods
+1. Generate tags with openAI
+```bash
+python3 main.py -method 'openai'
+```
+2. Generate tags with KeyBert
+```bash
+python3 main.py -method 'keybert'
+```
+3. Generate tags with Yake
+```bash
+python3 main.py -method 'yake'
+```
+4. Generate tags with TF-IDF
+```bash
+python3 main.py -method 'tfidf'
+```
+
+
+## Members:
+- Jiyul Kim
+- Jeongyoon Lee
+- Shreya Singh
