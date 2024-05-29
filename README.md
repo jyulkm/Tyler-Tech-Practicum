@@ -29,7 +29,7 @@ To install the necessary dependencies, run the following command:
 pip install -r requirements.txt
 ```
 
-## Generating Tags with different Methods
+## Usage
 1. Generate tags with openAI
 ```bash
 python3 main.py -method 'openai'
@@ -42,7 +42,7 @@ python3 main.py -method 'yake'
 ```bash
 python3 main.py -method 'tfidf'
 ```
-4. Generate tags with customized data
+4. Generate tags with customized data (data should have 'Name', 'Description', 'Tags' columns)
 ```bash
 python3 main.py -data 'name of csv file'
 ```
