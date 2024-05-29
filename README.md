@@ -3,18 +3,23 @@
 Auto tagging system that generates tags for dataset based on name and description of dataset.
 
 ## Introduction
-This project is 
+This project was part of Artificial Intelligence Industry Practicum, where we corporated with Tyler Technology. The Tyler Technology is a 
+company that provides software & services for the governing agencies and public sectors. The project was to provide tagging system to U.S. 
+Government Department of Health & Human service, specifically for website: HealthData.gov. The website stores various health data with metadata 
+including tags. However, current tags are being generated with human power and some data even do not have tags. In order to reduce human power and
+ensure to have tags for all dataset, our team developed a auto-tagging system that automatically generates tags based on looking at name and description of data. 
 
-## System Architecture
 ![Project Screenshot](images/architecture.png)
 
 ## Codebase Structure
-- `static` - Source code that defines core dataset generation, model architecture, training, and evaluation functionality
-- `templates` - [`hydra`](https://hydra.cc/)-composable config files that define data, model, and training hyperparameters
-- `datasets` - Synthetic HDF5 datasets generated using `paper_src.data.ChaoticDataModule`
-- `runs` - Checkpoints, training logs, and hyperparameters for models used in paper figures (Note: some files, including Tensorboard logs, have been removed to conserve space)
-- `scripts/analysis` - Scripts that generate paper figures using trained models
-- `scipts/training` - Scripts that retrain single models or multiple models in parallel using [`ray.tune`](https://docs.ray.io/en/latest/tune/index.html)
+- `data` - meta data files that are used to generate tags based on description
+- `images` - image that describes the project architecture
+- `static` - css file for building web app
+- `templates` - html templates for building web app
+- `.env` - OpenAI API key
+- `app.py` - python script for building web app
+- `main.py` - main python script for generating tags
+- `requirements.txt` - A file listing the project's dependencies
 
 ## Installation
 
@@ -29,17 +34,17 @@ pip install -r requirements.txt
 ```bash
 python3 main.py -method 'openai'
 ```
-2. Generate tags with KeyBert
-```bash
-python3 main.py -method 'keybert'
-```
-3. Generate tags with Yake
+2. Generate tags with Yake
 ```bash
 python3 main.py -method 'yake'
 ```
-4. Generate tags with TF-IDF
+3. Generate tags with TF-IDF
 ```bash
 python3 main.py -method 'tfidf'
+```
+4. Generate tags with customized data
+```bash
+python3 main.py -data 'name of csv file'
 ```
 
 
