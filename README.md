@@ -20,6 +20,7 @@ ensure to have tags for all dataset, our team developed a auto-tagging system th
 - `app.py` - python script for building web app
 - `main.py` - main python script for generating tags
 - `requirements.txt` - A file listing the project's dependencies
+- `active_approach` - A folder with latest approach - regenerating tags and evaluate tags using GPT API (Prompt engineering)
 
 ## Installation
 
